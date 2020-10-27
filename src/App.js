@@ -4,7 +4,7 @@ import {useState} from 'react';
 import {CSSTransition} from 'react-transition-group';
 import axios from 'axios';
 import { Component } from 'react';
-const API_URL = 'www.devcodecampmusiclibrary.com/api/music';
+const API_URL = 'http://www.devcodecampmusiclibrary.com/api/music';
 
 // navbar / dropdowm menu
 
@@ -12,11 +12,11 @@ function App() {
   return (
    <div>
      <Navbar>
-      <navItem icon="album"/>
-      <navItem icon="artist"/>
-      <navItem icon="genre"/>
-      <navItem icon="song title"/>
-      <navItem icon="release date"/>
+      <NavItem icon="album"/>
+      <NavItem icon="artist"/>
+      <NavItem icon="genre"/>
+      <NavItem icon="song title"/>
+      <NavItem icon="release date"/>
     <DropDownMenu/>
     </Navbar>
     <AxiosTable/>
@@ -100,37 +100,40 @@ class AxiosTable extends Component {
     music: []
   }
   componentDidMount() {
-    const url = `${API_URL}/users/`;
+    const url = API_URL;
     axios.get(url).then(response => response.data)
     .then((data) => {
-      this.setState({ music: data })
       console.log(this.state.music)
+      this.setState({ music: data })
+      
      })
   }
   buildTable(){
-    let tableRows ="";
+    let tableRows = [];
   for(let i = 0; i < this.state.music.length; i++){
-    tableRows +=  '<tr>' + '<td>' + this.state.music[i].title + '</td>'
+    tableRows.push( '<tr>' + '<td>' + this.state.music[i].title + '</td>'
       +'<td>' + this.state.music[i].album + '</td>' + '<td>' + this.state.music[i].artist + '</td>'
       + '<td>' + this.state.music[i].genre + '</td>' + '<td>' + this.state.music[i].releaseDate + '</td>'
-      + '</tr>';
+      + '</tr>');
   }
-
+    return tableRows;
   }
 
   render(){
     let table = this.buildTable();
       return (
-       <table id="table">
-    <tr>
-        <th id="title">Song</th>
-        <th id="artist">Artist</th>
-        <th id="genre">Genere</th>
-        <th id="album">Album</th>
-        <th id="release date">Release Date</th>
-    </tr> 
-    {table}
- </table>
+      <div>
+        <tbody id="table">
+          <tr>
+            <th>Song</th>
+            <th>Artist</th>
+            <th>Genere</th>
+            <th>Album</th>
+            <th>Release Date</th>
+        </tr> 
+        {table}
+        </tbody>
+      </div> 
  
       );
     }
